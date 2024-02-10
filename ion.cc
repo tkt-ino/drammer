@@ -364,3 +364,42 @@ void ION_detector(void) {
         }
     }
 }
+
+
+void ION_alloc_two_mega(void) {
+    uint32_t mask = 0xffffffff;
+    printf("Trying to allocate 2MB\n");
+
+    struct ion_handle_data handle_data;
+    struct ion_allocation_data allocation_data;
+    struct ion_data ion_data;
+    
+    allocation_data.flags = 0;
+    allocation_data.align = 0;
+    allocation_data.len = M(2);
+    allocation_data.heap_id_mask = mask;
+    int err = ioctl(ion_fd, ION_IOC_ALLOC, &allocation_data);
+    if (err) {
+        printf(" -> nope (%s)\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    } 
+    printf(" -> ok!\n");
+    handle_data.handle = allocation_data.handle;
+
+    ion_data.handle = allocation_data.handle;
+    ion_data.len = allocation_data.len;
+    if (ION_mmap(&ion_data)) {
+        printf(" -> could not mmap\n");
+    }
+    printf(" -> allocate 2MB via mmap\n");
+    printf(" -> address of 2MB block (virtual): %p\n", ion_data.mapping);
+    // printf(" -> value: %08x\n", *(uint8_t *)(ion_data.mapping));
+
+    ION_clean(&ion_data);
+
+    // err = ioctl(ion_fd, ION_IOC_FREE, &handle_data);
+    // if (err) {
+    //     printf(" -> could not free (%s)\n", strerror(errno));
+    //     exit(EXIT_FAILURE);
+    // }
+}
