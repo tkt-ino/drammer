@@ -53,4 +53,4 @@ reboot:
 	adb reboot
 
 test:
-	adb shell "$(TMPDIR)$(TARGET) -f/data/local/tmp/out.txt"
+	adb shell "$(TMPDIR)$(TARGET) -i -f/data/local/tmp/out.txt"
