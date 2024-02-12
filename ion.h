@@ -48,7 +48,7 @@ void ION_clean_all(    std::vector<struct ion_data *> &chunks, int max = 0);
 void ION_get_hammerable_rows(struct ion_data *chunk);
 
 void ION_detector(void);
-void ION_alloc_two_mega(void);
+void ION_alloc_two_mega(ion_data* ion_data);
 void ION_init(void);
 void ION_fini(void);
 

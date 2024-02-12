@@ -149,7 +149,8 @@ int main(int argc, char *argv[]) {
 
     if (heap_type_detector) {
         // ION_detecr();
-        ION_alloc_two_mega();
+        // ION_alloc_two_mega();
+        check_access_time();
         return 0;
     }
     

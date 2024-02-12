@@ -328,3 +328,35 @@ int RS_autodetect(void) {
 
     return rowsize;
 }
+
+void check_access_time() {
+    struct ion_data ion_data;
+    ION_alloc_two_mega(&ion_data);
+    printf(" -> address of 2MB block (virtual): %p\n", ion_data.mapping);
+    
+    // divide into 512 pages
+    std::vector<void *> pages;
+    for (int i = 0; i < 512; i++) {
+        pages.push_back(ion_data.mapping + 4096 * i);
+    }
+    // for (auto p: pages) {
+    //     printf("%p\n", p);
+    // }
+
+    volatile uintptr_t *virt1 = (volatile uintptr_t *)pages[0];
+    for (int i = 1; i < 512; i++) {
+        volatile uintptr_t *virt2 = (volatile uintptr_t *)pages[i];
+
+        uint64_t t1 = get_ns();
+        for (int i = 0; i < ROWSIZE_READCOUNT; i++) {
+            *virt1;
+            *virt2;
+        }
+        uint64_t t2 = get_ns();
+        printf("%llu ", (t2 - t1) / ROWSIZE_READCOUNT);
+    }
+    printf("\n");
+
+
+    ION_clean(&ion_data);
+}

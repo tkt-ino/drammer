@@ -27,6 +27,7 @@ const std::set<int> VALID_ROWSIZES = {K(16), K(32), K(64), K(128), K(256)};
 #define MAX_ROWSIZE K(256)
 
 int RS_autodetect(void);
+void check_access_time();
 
 struct model {
     std::string model; // ro.product.model
